@@ -11,6 +11,10 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -26,12 +30,16 @@ public class FriendAdapter extends ArrayAdapter<User> {
     List<User> mData;
     User user;
     ListAdapter listAdapter;
+    StorageReference imageRef;
+    FirebaseStorage storage;
 
     public FriendAdapter(Context context, int resource, List<User> objects) {
         super(context, resource, objects);
         mContext = context;
         mResource =resource;
         mData = objects;
+        storage = FirebaseStorage.getInstance();
+        imageRef = storage.getReference();
     }
 
     @NonNull
@@ -44,7 +52,8 @@ public class FriendAdapter extends ArrayAdapter<User> {
         }
         user = mData.get(position);
         ImageView imageView = (ImageView)convertView.findViewById(R.id.imageViewIcon);
-        Picasso.with(mContext).load(user.getImage_url()).into(imageView);
+        //Picasso.with(mContext).load(user.getImage_url()).into(imageView);
+        Glide.with(mContext).using(new FirebaseImageLoader()).load(imageRef.child(user.getImage_url())).into(imageView);
         TextView tv_title = (TextView) convertView.findViewById(R.id.textViewContent);
         tv_title.setText("Name: "+user.getUserfirstname()+" "+user.getUserlastname()+"\n"+"Gender: "+user.getGender());
 

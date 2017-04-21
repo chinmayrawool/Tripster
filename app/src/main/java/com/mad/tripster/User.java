@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by sid on 14-11-2016.
+ * Created by Chinmay Rawool on 4/20/2017.
  */
 
 public class User {

@@ -1,6 +1,7 @@
 package com.mad.tripster;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -15,15 +16,30 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 
 public class ContentActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+   /* private FirebaseDatabase mDatabase;
+    private DatabaseReference mUsersRef;
+    private ChildEventListener mUserListener;
+    ArrayList<User> users;
+    private ListView mFriendListView;
+    private FriendAdapter mFriendAdapter;*/
+
     TextView tv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +47,11 @@ public class ContentActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        //users = new ArrayList<User>();
 
         mAuth = FirebaseAuth.getInstance();
+        /*mDatabase = FirebaseDatabase.getInstance();
+        mUsersRef = mDatabase.getReference().child("users");*/
 
         if(mAuth.getCurrentUser()==null){
             //Intent to login activity
@@ -60,8 +79,9 @@ public class ContentActivity extends AppCompatActivity
             }
         };
 
-        tv = (TextView) findViewById(R.id.textViewHello);
+        //tv = (TextView) findViewById(R.id.textViewHello);
         //tv.setText(mAuth.getCurrentUser().getEmail());
+        Log.d("demo",mAuth.getCurrentUser().getEmail()+" "+mAuth.getCurrentUser().getUid());
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +99,36 @@ public class ContentActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        /*mUserListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                User user = dataSnapshot.getValue(User.class);
+                users.add(user);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        mUsersRef.addChildEventListener(mUserListener);*/
     }
 
     @Override
@@ -122,16 +172,19 @@ public class ContentActivity extends AppCompatActivity
         if (id == R.id.nav_trip) {
             // Handle the camera action
             Log.d("demo","Trips clicked");
-            tv.setText("trips page");
+            //tv.setText("trips page");
         } else if (id == R.id.nav_friends) {
             Log.d("demo","Friends clicked");
-            tv.setText("Friends page");
+            //tv.setText("Friends page");
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.container,new FriendsFragment(),"frag_friends").commit();
+            //Log.d("demo",users.toString());
         } else if (id == R.id.nav_requests) {
             Log.d("demo","Requests clicked");
-            tv.setText("Request page");
+            //tv.setText("Request page");
         } else if (id == R.id.nav_profile) {
             Log.d("demo","Profile clicked");
-            tv.setText("Profile page");
+            //tv.setText("Profile page");
         } else if (id == R.id.nav_logout) {
             Log.d("demo","Logout clicked");
             //tv.setText("Profile page");
@@ -158,4 +211,6 @@ public class ContentActivity extends AppCompatActivity
         mAuth.removeAuthStateListener(mAuthListener);
         //mAuth.signOut();
     }
+
+
 }

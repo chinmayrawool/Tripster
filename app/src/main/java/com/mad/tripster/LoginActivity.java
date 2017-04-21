@@ -213,7 +213,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @Override
     protected void onStop() {
         super.onStop();
-        mAuth.signOut();
+        //mAuth.signOut();
         if(mAuthListener != null){
             mAuth.removeAuthStateListener(mAuthListener);
         }
