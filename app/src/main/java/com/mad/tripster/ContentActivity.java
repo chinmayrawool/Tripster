@@ -88,6 +88,11 @@ public class ContentActivity extends AppCompatActivity
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                //uid and call add trip activity
+
+                Intent intent = new Intent(ContentActivity.this,AddTripActivity.class);
+                intent.putExtra("User",mAuth.getCurrentUser().getUid());
+                startActivity(intent);
             }
         });
 
@@ -173,6 +178,8 @@ public class ContentActivity extends AppCompatActivity
             // Handle the camera action
             Log.d("demo","Trips clicked");
             //tv.setText("trips page");
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.container,new TripsFragment(),"frag_trips").commit();
         } else if (id == R.id.nav_friends) {
             Log.d("demo","Friends clicked");
             //tv.setText("Friends page");

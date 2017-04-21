@@ -9,9 +9,28 @@ public class Trip {
     public String location;
     public String image_id;
     public String image_url;
-
+    public String created_by;
     public String trip_id;
 
+    public Trip() {
+    }
+
+    public Trip(String title, String location, String image_id, String image_url, String created_by) {
+        this.title = title;
+        this.location = location;
+        this.image_id = image_id;
+        this.image_url = image_url;
+        this.created_by = created_by;
+        //this.trip_id = trip_id;
+    }
+
+    public String getCreated_by() {
+        return created_by;
+    }
+
+    public void setCreated_by(String created_by) {
+        this.created_by = created_by;
+    }
 
     public String getTitle() {
         return title;
@@ -51,5 +70,17 @@ public class Trip {
 
     public void setTrip_id(String trip_id) {
         this.trip_id = trip_id;
+    }
+
+    @Override
+    public String toString() {
+        return "Trip{" +
+                "title='" + title + '\'' +
+                ", location='" + location + '\'' +
+                ", image_id='" + image_id + '\'' +
+                ", image_url='" + image_url + '\'' +
+                ", created_by='" + created_by + '\'' +
+                ", trip_id='" + trip_id + '\'' +
+                '}';
     }
 }

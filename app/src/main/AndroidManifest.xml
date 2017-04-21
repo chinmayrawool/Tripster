@@ -11,10 +11,9 @@
         <activity
             android:name=".ContentActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-
-        <activity android:name=".LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".LoginActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".SignUpActivity" />
-
+        <activity android:name=".AddTripActivity"></activity>
     </application>
 
 </manifest>

@@ -44,7 +44,7 @@ public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     FirebaseDatabase db;
     DatabaseReference rootRef;
-    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private FirebaseStorage storage;
     String userUID;
     private static final int RESULT_LOAD_IMAGE = 112;
     String name;
@@ -63,6 +63,7 @@ public class SignUpActivity extends AppCompatActivity {
         profilePicIV = (ImageView) findViewById(R.id.imageViewProfile);
         btnSignUp =(Button) findViewById(R.id.btn_signUp);
         btnCancel =(Button) findViewById(R.id.btn_cancel);
+        storage = FirebaseStorage.getInstance();
 
         profilePicIV.setOnClickListener(new View.OnClickListener() {
             @Override
