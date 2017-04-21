@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "585685577686",
+    "firebase_url": "https://tripster-afe74.firebaseio.com",
+    "project_id": "tripster-afe74",
+    "storage_bucket": "tripster-afe74.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:585685577686:android:72c14d59f08644d0",
+        "android_client_info": {
+          "package_name": "com.mad.tripster"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "585685577686-h2b0c980clgeppmkb792nrbe9p602daf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mad.tripster",
+            "certificate_hash": "a0eb321f600e2a5cfa405af5d4c8defd5f34dd96"
+          }
+        },
+        {
+          "client_id": "585685577686-gted0ipc6ljjqhjro1oeotivqbd7dr77.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsreD6ijyCsAb7huIIUuV6IysxInifUq8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "585685577686-gted0ipc6ljjqhjro1oeotivqbd7dr77.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
