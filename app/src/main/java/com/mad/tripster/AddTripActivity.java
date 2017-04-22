@@ -103,7 +103,7 @@ public class AddTripActivity extends AppCompatActivity {
                         }
                     });
                     //Trip(String title, String location, String image_id, String image_url, String created_by, String trip_id)
-                    Trip trip = new Trip(et_title.getText().toString(),et_location.getText().toString(),image_id,path,uid);
+                    Trip trip = new Trip(et_title.getText().toString(),et_location.getText().toString(),image_id,path,uid,uid+"@@@"+count);
                     mTripsDbReference.child(uid+"@@@"+count).setValue(trip);
                     count++;
                     finish();

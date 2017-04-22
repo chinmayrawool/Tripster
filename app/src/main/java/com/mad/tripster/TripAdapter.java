@@ -1,7 +1,9 @@
 package com.mad.tripster;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +42,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
             linear = (LinearLayout) itemView.findViewById(R.id.linear_insert);
             imageButton = (ImageButton) itemView.findViewById(R.id.imageButton);
 */
+
             //grid view
             imageView = (ImageView) itemView.findViewById(R.id.imageViewCover);
             titleTextView = (TextView) itemView.findViewById(R.id.textViewTitle);
@@ -58,7 +61,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Trip trip = mData.get(position);
+        final Trip trip = mData.get(position);
         TextView tv1 = holder.titleTextView;
         TextView tv2 = holder.locationTextView;
         ImageView iv = holder.imageView;
@@ -69,6 +72,15 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
             e.printStackTrace();
         }
         Picasso.with(mContext).load(trip.getImage_url()).into(iv);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext,ChatRoomActivity.class);
+                intent.putExtra("TripID",trip.getTrip_id());
+                mContext.startActivity(intent);
+            }
+        });
     }
 
   /*  @Override

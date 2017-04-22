@@ -15,13 +15,13 @@ public class Trip {
     public Trip() {
     }
 
-    public Trip(String title, String location, String image_id, String image_url, String created_by) {
+    public Trip(String title, String location, String image_id, String image_url, String created_by,String trip_id) {
         this.title = title;
         this.location = location;
         this.image_id = image_id;
         this.image_url = image_url;
         this.created_by = created_by;
-        //this.trip_id = trip_id;
+        this.trip_id = trip_id;
     }
 
     public String getCreated_by() {

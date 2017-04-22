@@ -16,7 +16,7 @@ public class User {
     public String gender;
     public String image_id;
     public String image_url;
-
+    public String deleteMsg ="";
     public String user_id;
 
     public String getGender() {
@@ -73,6 +73,14 @@ public class User {
 
     public void setUserlastname(String userlastname) {
         this.userlastname = userlastname;
+    }
+
+    public String getDeleteMsg() {
+        return deleteMsg;
+    }
+
+    public void setDeleteMsg(String deleteMsg) {
+        this.deleteMsg = deleteMsg;
     }
 
     public User() {
