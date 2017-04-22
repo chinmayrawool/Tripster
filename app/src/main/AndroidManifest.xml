@@ -31,7 +31,9 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".ChatRoomActivity"></activity>
+        <activity android:name=".ChatRoomActivity" />
+        <activity android:name=".ProfileEditActivity" />
+        <activity android:name=".TripShowActivity"></activity>
     </application>
 
 </manifest>

@@ -128,7 +128,7 @@ public class TripsFragment extends Fragment {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Trip trip = dataSnapshot.getValue(Trip.class);
                 trips.add(trip);
-                mTripsListView.setLayoutManager(new GridLayoutManager(getContext(),2, LinearLayoutManager.HORIZONTAL,false));
+                mTripsListView.setLayoutManager(new GridLayoutManager(getContext(),2, LinearLayoutManager.VERTICAL,false));
                 mTripAdapter = new TripAdapter(getContext(), trips);
                 mTripsListView.setAdapter(mTripAdapter);
                 mTripAdapter.notifyDataSetChanged();

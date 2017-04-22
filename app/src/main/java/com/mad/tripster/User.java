@@ -17,7 +17,16 @@ public class User {
     public String image_id;
     public String image_url;
     public String deleteMsg ="";
+    public String joinedTrip="";
     public String user_id;
+
+    public String getJoinedTrip() {
+        return joinedTrip;
+    }
+
+    public void setJoinedTrip(String joinedTrip) {
+        this.joinedTrip = joinedTrip;
+    }
 
     public String getGender() {
         return gender;

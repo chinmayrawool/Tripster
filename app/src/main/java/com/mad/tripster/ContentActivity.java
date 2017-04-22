@@ -191,6 +191,9 @@ public class ContentActivity extends AppCompatActivity
             //tv.setText("Request page");
         } else if (id == R.id.nav_profile) {
             Log.d("demo","Profile clicked");
+            Intent intent = new Intent(ContentActivity.this,ProfileEditActivity.class);
+            intent.putExtra("User_ID",mAuth.getCurrentUser().getUid());
+            startActivity(intent);
             //tv.setText("Profile page");
         } else if (id == R.id.nav_logout) {
             Log.d("demo","Logout clicked");
