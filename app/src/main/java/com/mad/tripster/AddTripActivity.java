@@ -25,6 +25,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.UUID;
 
 public class AddTripActivity extends AppCompatActivity {
@@ -63,6 +65,7 @@ public class AddTripActivity extends AppCompatActivity {
                 Intent i = new Intent(
                         Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                //i.setType("images/*");
 
                 startActivityForResult(i, RESULT_LOAD_COVER);
             }
@@ -129,20 +132,17 @@ public class AddTripActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RESULT_LOAD_COVER && resultCode == RESULT_OK && null != data) {
-            selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            try {
+                Uri imageUri = data.getData();
+                InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                coverPicIV = (ImageView) findViewById(R.id.imageViewCover1);
+                coverPicIV.setImageBitmap(selectedImage);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
 
-            Cursor cursor = getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
-            cursor.moveToFirst();
 
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
-            cursor.close();
-
-            //  ImageButton imageReceipt = (ImageButton) findViewById(R.id.imageButtonRecipt);
-            coverPicIV = (ImageView) findViewById(R.id.imageViewCover1);
-            coverPicIV.setImageBitmap(BitmapFactory.decodeFile(picturePath));
             coverPicIV.setTag("imageReceived");
         }
 

@@ -297,4 +297,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         Log.d("demo","Print list:"+list.size());
         return list;
     }
+
+
+
 }

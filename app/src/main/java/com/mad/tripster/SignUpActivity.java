@@ -32,6 +32,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.UUID;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -71,7 +73,7 @@ public class SignUpActivity extends AppCompatActivity {
                 Intent i = new Intent(
                         Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
+                i.setType("image/*");
                 startActivityForResult(i, RESULT_LOAD_IMAGE);
             }
         });
@@ -200,8 +202,8 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
-            selectedImage = data.getData();
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK ) {  //&& null != data
+            /*selectedImage = data.getData();
             String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
             Cursor cursor = getContentResolver().query(selectedImage,
@@ -210,11 +212,20 @@ public class SignUpActivity extends AppCompatActivity {
 
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String picturePath = cursor.getString(columnIndex);
-            cursor.close();
+            cursor.close();*/
 
             //  ImageButton imageReceipt = (ImageButton) findViewById(R.id.imageButtonRecipt);
-            profilePicIV = (ImageView) findViewById(R.id.imageViewProfile);
-            profilePicIV.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+
+            try {
+                Uri imageUri = data.getData();
+                InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                profilePicIV = (ImageView) findViewById(R.id.imageViewProfile);
+                profilePicIV.setImageBitmap(selectedImage);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
             profilePicIV.setTag("imageReceived");
         }
 
