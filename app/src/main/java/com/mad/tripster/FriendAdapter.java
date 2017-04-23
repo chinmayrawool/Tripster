@@ -49,6 +49,7 @@ public class FriendAdapter extends ArrayAdapter<User> {
     User currUser;
     List<String> sentRequests;
     List<String> receivedReq;
+    List<String> friends;
 
     public FriendAdapter(Context context, int resource, List<User> objects) {
         super(context, resource, objects);
@@ -63,7 +64,7 @@ public class FriendAdapter extends ArrayAdapter<User> {
         mUserRef = db.getReference().child("users");
         sentRequests = new ArrayList<String>();
         receivedReq = new ArrayList<String>();
-
+        friends = new ArrayList<String>();
         mUserListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -115,6 +116,17 @@ public class FriendAdapter extends ArrayAdapter<User> {
         if(currUser.getSentReq()!=null){
             sentRequests = currUser.getSentReq();
             for(String id: sentRequests) {
+                Log.d("demo","sent request to id: "+id);
+                Log.d("demo","list user's id:"+user.getUser_id());
+                if (user.getUser_id().equals(id)){
+                    requestBtn.setVisibility(View.INVISIBLE);
+                }
+            }
+        }
+
+        if(currUser.getFriends()!=null){
+            friends = currUser.getFriends();
+            for(String id: friends) {
                 Log.d("demo","sent request to id: "+id);
                 Log.d("demo","list user's id:"+user.getUser_id());
                 if (user.getUser_id().equals(id)){
