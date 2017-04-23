@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
@@ -23,22 +22,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
- * Created by Chinmay Rawool on 4/20/2017.
+ * Created by neha5 on 22-04-2017.
  */
 
-public class FriendAdapter extends ArrayAdapter<User> {
+public class RequestAdapter extends ArrayAdapter<User> {
     Context mContext;
     int mResource;
     List<User> mData;
     User user;
-    ListAdapter listAdapter;
     StorageReference imageRef;
     FirebaseStorage storage;
     FirebaseAuth mAuth;
@@ -47,10 +43,11 @@ public class FriendAdapter extends ArrayAdapter<User> {
     FirebaseDatabase db;
     ChildEventListener mUserListener;
     User currUser;
-    List<String> sentRequests;
-    List<String> receivedReq;
+    List<String> friendsLoggedInUser;
+    List<String> friendsUserInList;
+    List<String> requestList;
 
-    public FriendAdapter(Context context, int resource, List<User> objects) {
+    public RequestAdapter(Context context, int resource, List<User> objects) {
         super(context, resource, objects);
         mContext = context;
         mResource =resource;
@@ -61,8 +58,9 @@ public class FriendAdapter extends ArrayAdapter<User> {
         uid = mAuth.getCurrentUser().getUid();
         db = FirebaseDatabase.getInstance();
         mUserRef = db.getReference().child("users");
-        sentRequests = new ArrayList<String>();
-        receivedReq = new ArrayList<String>();
+        friendsLoggedInUser = new ArrayList<String>();
+        friendsUserInList = new ArrayList<String>();
+        requestList = new ArrayList<String>();
 
         mUserListener = new ChildEventListener() {
             @Override
@@ -96,6 +94,10 @@ public class FriendAdapter extends ArrayAdapter<User> {
         };
 
         mUserRef.addChildEventListener(mUserListener);
+
+        for(User u: mData){
+            requestList.add(u.getUser_id());
+        }
     }
 
     @NonNull
@@ -107,50 +109,53 @@ public class FriendAdapter extends ArrayAdapter<User> {
             convertView = inflater.inflate(mResource,parent,false);
         }
 
-
         user = mData.get(position);
         ImageView imageView = (ImageView)convertView.findViewById(R.id.imageViewIcon);
-        Button requestBtn = (Button) convertView.findViewById(R.id.btn_send_request);
-
-        if(currUser.getSentReq()!=null){
-            sentRequests = currUser.getSentReq();
-            for(String id: sentRequests) {
-                Log.d("demo","sent request to id: "+id);
-                Log.d("demo","list user's id:"+user.getUser_id());
-                if (user.getUser_id().equals(id)){
-                    requestBtn.setVisibility(View.INVISIBLE);
-                }
-            }
-        }
+        Button acceptBtn = (Button) convertView.findViewById(R.id.btn_accept);
+        Button declineBtn = (Button) convertView.findViewById(R.id.btn_decline);
 
         //Picasso.with(mContext).load(user.getImage_url()).into(imageView);
         Glide.with(mContext).using(new FirebaseImageLoader()).load(imageRef.child(user.getImage_url())).into(imageView);
         TextView tv_title = (TextView) convertView.findViewById(R.id.textViewContent);
         tv_title.setText("Name: "+user.getUserfirstname()+" "+user.getUserlastname()+"\n"+"Gender: "+user.getGender());
 
-        requestBtn.setOnClickListener(new View.OnClickListener() {
+
+
+        acceptBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //remove from reqlist, add into both friends list
                 user = mData.get(position);
-                if(user.getReceivedReq()!=null) {
-                    receivedReq = user.getReceivedReq();
-                    Log.d("demo","not null");
-                }
-                if(!receivedReq.contains(uid)) {
-                    receivedReq.add(uid);
 
-
+                String uid2 = user.getUser_id();
+                requestList.remove(requestList.indexOf(uid2));
+                if(!friendsLoggedInUser.contains(uid2)) {
+                    friendsLoggedInUser.add(uid2);
                 }
-                Log.d("demo","new user id: "+user.getUser_id());
-                sentRequests.add(user.getUser_id());
-                currUser.setSentReq(sentRequests);
-                user.setReceivedReq(receivedReq);
-                mUserRef.child(user.getUser_id()).setValue(user);
+                if(!friendsUserInList.contains(currUser.getUser_id())) {
+                    friendsUserInList.add(currUser.getUser_id());
+                }
+                currUser.setFriends(friendsLoggedInUser);
+                currUser.setReceivedReq(requestList);
+                user.setFriends(friendsUserInList);
+                mUserRef.child(uid2).setValue(user);
                 mUserRef.child(uid).setValue(currUser);
                 v.setVisibility(View.INVISIBLE);
             }
         });
 
+        declineBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                user = mData.get(position);
+
+                String uid3 = user.getUser_id();
+                requestList.remove(requestList.indexOf(uid3));
+                currUser.setReceivedReq(requestList);
+                mUserRef.child(uid).setValue(currUser);
+                v.setVisibility(View.INVISIBLE);
+            }
+        });
 
         convertView.setClickable(true);
         convertView.setLongClickable(true);

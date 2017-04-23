@@ -188,6 +188,8 @@ public class ContentActivity extends AppCompatActivity
             //Log.d("demo",users.toString());
         } else if (id == R.id.nav_requests) {
             Log.d("demo","Requests clicked");
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.container,new RequestsFragment(),"frag_requests").commit();
             //tv.setText("Request page");
         } else if (id == R.id.nav_profile) {
             Log.d("demo","Profile clicked");
