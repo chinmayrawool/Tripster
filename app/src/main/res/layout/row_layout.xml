@@ -9,8 +9,15 @@
         android:id="@+id/imageViewIcon"/>
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="235dp"
+        android:layout_height="70dp"
         android:id="@+id/textViewContent" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_send_request"
+        android:text="Add Friend"
+        android:layout_gravity="center_vertical"/>
 
 </LinearLayout>

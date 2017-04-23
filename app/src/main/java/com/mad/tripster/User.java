@@ -3,6 +3,7 @@ package com.mad.tripster;
 import com.google.firebase.database.Exclude;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,6 +20,35 @@ public class User {
     public String deleteMsg ="";
     public String joinedTrip="";
     public String user_id;
+
+    public List<String> friends;
+    public List<String> sentReq;
+    public List<String> receivedReq;
+
+    public List<String> getReceivedReq() {
+        return receivedReq;
+    }
+
+    public void setReceivedReq(List<String> receivedReq) {
+        this.receivedReq = receivedReq;
+    }
+
+    public List<String> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(List<String> friends) {
+        this.friends = friends;
+    }
+
+    public List<String> getSentReq() {
+        return sentReq;
+    }
+
+    public void setSentReq(List<String> sentReq) {
+        this.sentReq = sentReq;
+    }
+
 
     public String getJoinedTrip() {
         return joinedTrip;
