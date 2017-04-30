@@ -112,7 +112,7 @@ public class FriendAdapter extends ArrayAdapter<User> {
 
         user = mData.get(position);
         ImageView imageView = (ImageView)convertView.findViewById(R.id.imageViewIcon);
-        Button requestBtn = (Button) convertView.findViewById(R.id.btn_send_request);
+        final Button requestBtn = (Button) convertView.findViewById(R.id.btn_send_request);
 
         if(currUser.getSentReq()!=null){
             sentRequests = currUser.getSentReq();
@@ -120,7 +120,8 @@ public class FriendAdapter extends ArrayAdapter<User> {
                 Log.d("demo","sent request to id: "+id);
                 Log.d("demo","list user's id:"+user.getUser_id());
                 if (user.getUser_id().equals(id)){
-                    requestBtn.setVisibility(View.INVISIBLE);
+                    requestBtn.setText("Request Pending");
+                    requestBtn.setEnabled(false);
                 }
             }
         }
@@ -160,7 +161,9 @@ public class FriendAdapter extends ArrayAdapter<User> {
                 user.setReceivedReq(receivedReq);
                 mUserRef.child(user.getUser_id()).setValue(user);
                 mUserRef.child(uid).setValue(currUser);
-                v.setVisibility(View.INVISIBLE);
+                //v.setVisibility(View.INVISIBLE);
+                requestBtn.setText("Request Pending");
+                requestBtn.setEnabled(false);
             }
         });
 
