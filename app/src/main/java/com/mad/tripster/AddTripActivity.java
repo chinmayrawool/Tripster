@@ -106,8 +106,9 @@ public class AddTripActivity extends AppCompatActivity {
                         }
                     });
                     //Trip(String title, String location, String image_id, String image_url, String created_by, String trip_id)
-                    Trip trip = new Trip(et_title.getText().toString(),et_location.getText().toString(),image_id,path,uid,uid+"@@@"+count);
-                    mTripsDbReference.child(uid+"@@@"+count).setValue(trip);
+                    String newTripId = uid+"@@@"+String.valueOf(UUID.randomUUID());
+                    Trip trip = new Trip(et_title.getText().toString(),et_location.getText().toString(),image_id,path,uid,newTripId);
+                    mTripsDbReference.child(newTripId).setValue(trip);
                     count++;
                     finish();
                 }
@@ -131,8 +132,8 @@ public class AddTripActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RESULT_LOAD_COVER && resultCode == RESULT_OK && null != data) {
-            try {
+        if (requestCode == RESULT_LOAD_COVER && resultCode == RESULT_OK){// && null != data) {
+           try {
                 Uri imageUri = data.getData();
                 InputStream imageStream = getContentResolver().openInputStream(imageUri);
                 Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);

@@ -10,6 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -22,16 +28,31 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
     private List<Trip> mData;
     // Store the context for easy access
     private Context mContext;
+    private String userID;
 
-    public TripAdapter(Context mContext,List<Trip> mData) {
+    FirebaseStorage storage;
+    StorageReference imageRef;
+
+    private FirebaseDatabase mDatabase;
+    private DatabaseReference mTripsRef;
+
+    public TripAdapter(Context mContext,List<Trip> mData, String userID) {
         this.mData = mData;
         this.mContext = mContext;
+        this.userID = userID;
+
+        storage = FirebaseStorage.getInstance();
+        imageRef = storage.getReference();
+
+        mDatabase = FirebaseDatabase.getInstance();
+        mTripsRef = mDatabase.getReference().child("trips");
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         public ImageView imageView;
         public TextView titleTextView;
         public TextView locationTextView;
+        public ImageView ivDeleteIcon;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -47,6 +68,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
             imageView = (ImageView) itemView.findViewById(R.id.imageViewCover);
             titleTextView = (TextView) itemView.findViewById(R.id.textViewTitle);
             locationTextView = (TextView) itemView.findViewById(R.id.textView2);
+            ivDeleteIcon = (ImageView) itemView.findViewById(R.id.iv_delete_icon);
         }
     }
 
@@ -60,18 +82,27 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         final Trip trip = mData.get(position);
         TextView tv1 = holder.titleTextView;
         TextView tv2 = holder.locationTextView;
         ImageView iv = holder.imageView;
+        ImageView ivDelete = holder.ivDeleteIcon;
+        ivDelete.setEnabled(false);
+
+        if(trip.getCreated_by().equals(userID)){
+            ivDelete.setEnabled(true);
+            ivDelete.setVisibility(View.VISIBLE);
+        }
+
         try {
             tv1.setText(trip.getTitle());
             tv2.setText(trip.getLocation());
         }catch(NullPointerException e){
             e.printStackTrace();
         }
-        Picasso.with(mContext).load(trip.getImage_url()).into(iv);
+        //Picasso.with(mContext).load(trip.getImage_url()).into(iv);
+        Glide.with(mContext).using(new FirebaseImageLoader()).load(imageRef.child(trip.getImage_url())).into(iv);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +113,18 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
                 /*Intent intent = new Intent(mContext,ChatRoomActivity.class);
                 intent.putExtra("TripID",trip.getTrip_id());
                 mContext.startActivity(intent);*/
+            }
+        });
+
+
+        ivDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("demo","Delete trip clicked");
+                //make view invisible, delete trip from firebase db
+                holder.itemView.setVisibility(View.INVISIBLE);
+                mTripsRef.child(trip.getTrip_id()).removeValue();
+
             }
         });
     }

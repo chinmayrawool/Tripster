@@ -9,12 +9,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -33,6 +37,9 @@ public class TripShowActivity extends AppCompatActivity {
     ArrayList<String> list;
     String uid;
 
+    FirebaseStorage storage;
+    StorageReference imageRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +48,9 @@ public class TripShowActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         tripId = getIntent().getExtras().getString("TripID");
         Log.d("demo",tripId);
+
+        storage = FirebaseStorage.getInstance();
+        imageRef = storage.getReference();
 
         textViewTitle = (TextView) findViewById(R.id.trip_title);
         textViewLocation = (TextView) findViewById(R.id.trip_location);
@@ -133,7 +143,8 @@ public class TripShowActivity extends AppCompatActivity {
         textViewTitle.setText(currTrip.getTitle().toString());
         textViewLocation.setText(currTrip.getLocation().toString());
         // Display image
-
+        //imageViewCover
+        Glide.with(this).using(new FirebaseImageLoader()).load(imageRef.child(currTrip.getImage_url())).into(imageViewCover);
 
 
         if(list.contains(tripId)){
@@ -153,6 +164,7 @@ public class TripShowActivity extends AppCompatActivity {
                     }
                     currUser.setJoinedTrip(sb.toString());
                     btnJoin.setText("Join");
+                    btnChatroom.setEnabled(false);
                 }else{
                     list.add(tripId);
                     StringBuilder sb = new StringBuilder();
@@ -164,10 +176,18 @@ public class TripShowActivity extends AppCompatActivity {
                     }
                     currUser.setJoinedTrip(sb.toString());
                     btnJoin.setText("Leave");
+                    btnChatroom.setEnabled(true);
                 }
                 mUserRef.child(uid).setValue(currUser);
+
             }
         });
+
+        if(btnJoin.getText().equals("Join")){
+            btnChatroom.setEnabled(false);
+        }else if(btnJoin.getText().equals("Leave")){
+            btnChatroom.setEnabled(true);
+        }
 
         btnChatroom.setOnClickListener(new View.OnClickListener() {
             @Override

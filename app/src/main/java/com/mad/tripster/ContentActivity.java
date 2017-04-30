@@ -83,6 +83,7 @@ public class ContentActivity extends AppCompatActivity
         //tv.setText(mAuth.getCurrentUser().getEmail());
         Log.d("demo",mAuth.getCurrentUser().getEmail()+" "+mAuth.getCurrentUser().getUid());
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setImageResource(R.drawable.ic_trip);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

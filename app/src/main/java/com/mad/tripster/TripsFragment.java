@@ -7,11 +7,16 @@ import android.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,8 +30,6 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link TripsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
  * Use the {@link TripsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
@@ -37,15 +40,23 @@ public class TripsFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private FirebaseDatabase mDatabase;
     private DatabaseReference mTripsRef;
+    private DatabaseReference mUserRef;
+
     private ChildEventListener mTripListener;
+    private ChildEventListener mUserListener;
     List<Trip> trips;
     private RecyclerView mTripsListView;
     private TripAdapter mTripAdapter;
 
+    private FirebaseAuth mAuth;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private String userID;
+    private User currUser;
+    private List<String> usersFriends;
 
     //private OnFragmentInteractionListener mListener;
 
@@ -114,22 +125,76 @@ public class TripsFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        userID = user.getUid();
 
         trips = new ArrayList<Trip>();
         mDatabase = FirebaseDatabase.getInstance();
         mTripsRef = mDatabase.getReference().child("trips");
-
+        mUserRef = mDatabase.getReference().child("users");
         //List<Us> friendlyMessages = new ArrayList<>();
         mTripsListView = (RecyclerView) getActivity().findViewById(R.id.listView_trips);
+
+        mUserListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                User usr = dataSnapshot.getValue(User.class);
+                Log.d("demo","user onchildadded");
+                if(usr.getUser_id().equals(userID)){
+                    Log.d("demo","User found");
+                    currUser = usr;
+                    usersFriends = currUser.getFriends();
+                    mTripsRef.addChildEventListener(mTripListener);
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        mUserRef.addChildEventListener(mUserListener);
 
 
         mTripListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Trip trip = dataSnapshot.getValue(Trip.class);
-                trips.add(trip);
+                Log.d("demo","trip onchildadded");
+
+                //show only the trips created by you or your friends
+                //trip.getcreatedby == curruser.getId OR curruser.getfriends == trip.createdby
+                if(trip.getCreated_by().equals(currUser.getUser_id())){
+                    Log.d("demo","trip created by you "+trip.getTrip_id());
+                    trips.add(trip);
+                }else{
+                    for(String id: usersFriends){
+                        if(trip.getCreated_by().equals(id)){
+                            Log.d("demo","trip created by your friends "+trip.getTrip_id());
+                            trips.add(trip);
+                        }
+                    }
+                }
+
                 mTripsListView.setLayoutManager(new GridLayoutManager(getContext(),2, LinearLayoutManager.VERTICAL,false));
-                mTripAdapter = new TripAdapter(getContext(), trips);
+                mTripAdapter = new TripAdapter(getContext(), trips, userID);
                 mTripsListView.setAdapter(mTripAdapter);
                 mTripAdapter.notifyDataSetChanged();
             }
@@ -155,7 +220,7 @@ public class TripsFragment extends Fragment {
             }
         };
 
-        mTripsRef.addChildEventListener(mTripListener);
+
 
     }
 
