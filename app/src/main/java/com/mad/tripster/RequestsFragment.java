@@ -59,6 +59,8 @@ public class RequestsFragment extends Fragment {
         mUsersRef = mDatabase.getReference().child("users");
 
         mRequestListView = (ListView) getActivity().findViewById(R.id.listView_requests);
+        requestAdapter = new RequestAdapter(getContext(), R.layout.row_request_layout, friends);
+
 
 
         mUserListener = new ChildEventListener() {
@@ -68,17 +70,25 @@ public class RequestsFragment extends Fragment {
                 users.add(user1);
                 if(user1.getUser_id().equals(uid)){
                     currUser = user1;
+                    Log.d("demo","user found in request fragment: "+user1.toString());
                     if(currUser.getReceivedReq()!=null) {
+                        Log.d("demo","user has requests"+currUser.getReceivedReq().toString());
                         for (String id : currUser.getReceivedReq()) {
+                            Log.d("demo","id: "+id);
                             for (User usr : users) {
+                                Log.d("demo","usr id:"+usr.getUser_id());
                                 if (usr.getUser_id().equals(id)) {
+                                    Log.d("demo","ids matched, user added:"+usr.toString());
                                     friends.add(usr);
+                                    //requestAdapter.add(usr);
                                 }
                             }
-                            Log.d("demo",friends.toString());
-                            requestAdapter = new RequestAdapter(getContext(), R.layout.row_request_layout, friends);
-                            mRequestListView.setAdapter(requestAdapter);
+                            Log.d("demo","Friends: "+friends.toString());
+
                         }
+                        requestAdapter = new RequestAdapter(getContext(), R.layout.row_request_layout, friends);
+                        mRequestListView.setAdapter(requestAdapter);
+                        requestAdapter.setNotifyOnChange(true);
                     }
                 }
 

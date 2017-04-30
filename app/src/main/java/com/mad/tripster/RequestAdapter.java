@@ -95,6 +95,7 @@ public class RequestAdapter extends ArrayAdapter<User> {
 
         mUserRef.addChildEventListener(mUserListener);
 
+        Log.d("demo","inside constructor");
         for(User u: mData){
             requestList.add(u.getUser_id());
         }

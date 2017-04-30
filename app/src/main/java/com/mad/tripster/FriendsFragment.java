@@ -36,6 +36,8 @@ public class FriendsFragment extends Fragment {
     List<User> users;
     private ListView mFriendListView;
     private FriendAdapter mFriendAdapter;
+    FirebaseAuth mAuth;
+    String uid;
 
     public FriendsFragment() {
         // Required empty public constructor
@@ -77,6 +79,9 @@ public class FriendsFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mAuth = FirebaseAuth.getInstance();
+        uid = mAuth.getCurrentUser().getUid();
+
         users = new ArrayList<User>();
         mDatabase = FirebaseDatabase.getInstance();
         mUsersRef = mDatabase.getReference().child("users");
@@ -91,7 +96,9 @@ public class FriendsFragment extends Fragment {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 User user = dataSnapshot.getValue(User.class);
                 //users.add(user);
-                mFriendAdapter.add(user);
+                if(!user.getUser_id().equals(uid)) {
+                    mFriendAdapter.add(user);
+                }
                 Log.d("demo","Inside on child added"+user.toString());
             }
 

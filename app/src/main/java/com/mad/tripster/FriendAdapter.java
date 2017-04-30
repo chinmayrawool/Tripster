@@ -72,6 +72,7 @@ public class FriendAdapter extends ArrayAdapter<User> {
 
                 if(user1.getUser_id().equals(uid)){
                     currUser = user1;
+
                 }
             }
 
