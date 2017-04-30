@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center">
+
+    android:weightSum="1">
 
     <TextView
         android:layout_width="match_parent"
@@ -11,7 +12,8 @@
         android:text="Edit Profile"
         android:gravity="center"
         android:textSize="20dp"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="20dp"
+        android:layout_weight="0.18" />
 
     <EditText
         android:layout_width="match_parent"
@@ -43,10 +45,10 @@
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:id="@+id/imageViewProfile"
-        android:tag="profile"
         app:srcCompat="?android:attr/actionModeSelectAllDrawable"
         android:clickable="true"
-        android:layout_margin="20dp"/>
+        android:layout_margin="20dp"
+        android:layout_gravity="center"/>
 
 
 

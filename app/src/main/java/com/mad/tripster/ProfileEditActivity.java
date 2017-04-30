@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,6 +33,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.UUID;
 
 public class ProfileEditActivity extends AppCompatActivity {
@@ -44,12 +47,16 @@ public class ProfileEditActivity extends AppCompatActivity {
     FirebaseDatabase db;
     FirebaseAuth mAuth;
     FirebaseAuth.AuthStateListener mAuthListener;
-    FirebaseStorage storage;
     DatabaseReference mUserRef;
     ChildEventListener mUserListener;
     User currUser;
     private static final int RESULT_LOAD_IMAGE =112 ;
     Uri selectedImage;
+
+    //firebase storage
+    FirebaseStorage storage;
+    StorageReference imageRef;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +71,10 @@ public class ProfileEditActivity extends AppCompatActivity {
         btnSave = (Button) findViewById(R.id.btn_editProfile);
 
         mAuth = FirebaseAuth.getInstance();
+
+        //storage
+        storage = FirebaseStorage.getInstance();
+        imageRef = storage.getReference();
 
         if(getIntent().getExtras().getString("User_ID")!=null){
             userID = getIntent().getExtras().getString("User_ID");
@@ -80,7 +91,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                 Intent i = new Intent(
                         Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
+                i.setType("image/*");
                 startActivityForResult(i, RESULT_LOAD_IMAGE);
             }
         });
@@ -94,6 +105,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                     editTextLname.setText(currUser.getUserlastname());
                     editTextGender.setText(currUser.getGender());
 //                    Glide.with(ProfileEditActivity.this).
+                    Glide.with(ProfileEditActivity.this).using(new FirebaseImageLoader()).load(imageRef.child(currUser.getImage_url())).into(imageViewProfile);
                 }
             }
 
@@ -136,8 +148,8 @@ public class ProfileEditActivity extends AppCompatActivity {
                     Toast.makeText(ProfileEditActivity.this, "Last Name field is empty", Toast.LENGTH_LONG).show();
                 }else if (editTextGender.getText().toString().equals("")) {
                     Toast.makeText(ProfileEditActivity.this, "Choose a gender", Toast.LENGTH_LONG).show();
-                }else if ("profile".equals(imageViewProfile.getTag())) {
-                    Toast.makeText(ProfileEditActivity.this, "Select Image", Toast.LENGTH_LONG).show();}
+                }/*else if ("profile".equals(imageViewProfile.getTag())) {
+                    Toast.makeText(ProfileEditActivity.this, "Select Image", Toast.LENGTH_LONG).show();}*/
                 else {
                     currUser.setUserfirstname(editTextFname.getText().toString());
                     currUser.setUserlastname(editTextLname.getText().toString());
@@ -182,8 +194,8 @@ public class ProfileEditActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
-            selectedImage = data.getData();
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK){ // && null != data) {
+            /*selectedImage = data.getData();
             String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
             Cursor cursor = getContentResolver().query(selectedImage,
@@ -196,8 +208,20 @@ public class ProfileEditActivity extends AppCompatActivity {
 
             //  ImageButton imageReceipt = (ImageButton) findViewById(R.id.imageButtonRecipt);
             imageViewProfile = (ImageView) findViewById(R.id.imageViewProfile);
-            imageViewProfile.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-            imageViewProfile.setTag("imageReceived");
+            imageViewProfile.setImageBitmap(BitmapFactory.decodeFile(picturePath));*/
+
+
+            try {
+                Uri imageUri = data.getData();
+                InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                imageViewProfile = (ImageView) findViewById(R.id.imageViewProfile);
+                imageViewProfile.setImageBitmap(selectedImage);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            //imageViewProfile.setTag("imageReceived");
         }
     }
 }
