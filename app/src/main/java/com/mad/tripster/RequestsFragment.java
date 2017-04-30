@@ -71,19 +71,24 @@ public class RequestsFragment extends Fragment {
                 if(user1.getUser_id().equals(uid)){
                     currUser = user1;
                     Log.d("demo","user found in request fragment: "+user1.toString());
-                    if(currUser.getReceivedReq()!=null) {
-                        Log.d("demo","user has requests"+currUser.getReceivedReq().toString());
+                }
+
+                Log.d("demo","Inside on child added"+user1.toString());
+                if(currUser!=null) {
+                    if (currUser.getReceivedReq() != null) {
+                        Log.d("demo", "user has requests" + currUser.getReceivedReq().toString());
                         for (String id : currUser.getReceivedReq()) {
-                            Log.d("demo","id: "+id);
+                            Log.d("demo", "id: " + id + " users: " + users.toString());
                             for (User usr : users) {
-                                Log.d("demo","usr id:"+usr.getUser_id());
+                                Log.d("demo", "usr id:" + usr.getUser_id());
                                 if (usr.getUser_id().equals(id)) {
-                                    Log.d("demo","ids matched, user added:"+usr.toString());
-                                    friends.add(usr);
+                                    Log.d("demo", "ids matched, user added:" + usr.toString());
+                                    if(!friends.contains(usr))
+                                        friends.add(usr);
                                     //requestAdapter.add(usr);
                                 }
                             }
-                            Log.d("demo","Friends: "+friends.toString());
+                            Log.d("demo", "Friends: " + friends.toString());
 
                         }
                         requestAdapter = new RequestAdapter(getContext(), R.layout.row_request_layout, friends);
@@ -91,8 +96,6 @@ public class RequestsFragment extends Fragment {
                         requestAdapter.setNotifyOnChange(true);
                     }
                 }
-
-                Log.d("demo","Inside on child added"+user1.toString());
             }
 
             @Override

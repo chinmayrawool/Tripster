@@ -127,6 +127,8 @@ public class RequestAdapter extends ArrayAdapter<User> {
             public void onClick(View v) {
                 //remove from reqlist, add into both friends list
                 user = mData.get(position);
+                friendsLoggedInUser = currUser.getFriends();
+                friendsUserInList = user.getFriends();
 
                 String uid2 = user.getUser_id();
                 requestList.remove(requestList.indexOf(uid2));
@@ -151,9 +153,13 @@ public class RequestAdapter extends ArrayAdapter<User> {
                 user = mData.get(position);
 
                 String uid3 = user.getUser_id();
+                List<String> sentReqList = user.getSentReq();
+                sentReqList.remove(sentReqList.indexOf(currUser.getUser_id()));
+                user.setSentReq(sentReqList);
                 requestList.remove(requestList.indexOf(uid3));
                 currUser.setReceivedReq(requestList);
                 mUserRef.child(uid).setValue(currUser);
+                mUserRef.child(uid3).setValue(user);
                 v.setVisibility(View.INVISIBLE);
             }
         });
