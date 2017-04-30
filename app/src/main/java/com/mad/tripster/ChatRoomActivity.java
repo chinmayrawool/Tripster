@@ -27,6 +27,7 @@ import com.google.firebase.storage.StorageReference;
 import org.ocpsoft.prettytime.PrettyTime;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
@@ -114,6 +115,7 @@ public class ChatRoomActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //rootRef.removeEventListener(v);
                 String text = messageText.getText().toString().trim();
+                messageText.setText("");
                 Log.d("demo","Send message ");
                 if(!text.equals("")){
                     String id = String.valueOf(UUID.randomUUID());
@@ -215,7 +217,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         Log.d("demo","UserID:");
         Log.d("demo","dsdas"+messages.toString());
         chatslayout.removeAllViews();
-
+        Collections.sort(messages,MessageObj.timeComp);
 
         for(final MessageObj m:messages){
             ArrayList<String> delMsgList = getDeleteMessage();

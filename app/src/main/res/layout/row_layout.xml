@@ -9,7 +9,7 @@
         android:id="@+id/imageViewIcon"/>
 
     <TextView
-        android:layout_width="235dp"
+        android:layout_width="201dp"
         android:layout_height="70dp"
         android:id="@+id/textViewContent" />
 

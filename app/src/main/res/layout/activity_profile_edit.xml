@@ -27,11 +27,29 @@
         android:id="@+id/et_lname_profile"
         android:hint="Last Name"/>
 
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/et_gender_profile"
-        android:hint="Gender"/>
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Gender"
+            android:layout_weight="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:gravity="center_vertical" />
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/sp_gender_profile"
+            android:entries="@array/gender"
+            android:layout_weight="1">
+
+        </Spinner>
+
+    </LinearLayout>
 
 
     <TextView

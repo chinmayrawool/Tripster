@@ -130,17 +130,38 @@ public class RequestAdapter extends ArrayAdapter<User> {
                 friendsLoggedInUser = currUser.getFriends();
                 friendsUserInList = user.getFriends();
 
+                Log.d("demo", "Current user friends: " +currUser.getFriends().toString());
+                Log.d("demo", "List user's friends: "+user.getFriends());
+
                 String uid2 = user.getUser_id();
                 requestList.remove(requestList.indexOf(uid2));
-                if(!friendsLoggedInUser.contains(uid2)) {
+                List<String> sentReqList = user.getSentReq();
+
+                if(sentReqList!=null){
+                    sentReqList.remove(sentReqList.indexOf(currUser.getUser_id()));
+                }
+
+                if(friendsLoggedInUser!=null) {
+                    if (!friendsLoggedInUser.contains(uid2)) {
+                        friendsLoggedInUser.add(uid2);
+                    }
+                }else{
+                    friendsLoggedInUser = new ArrayList<String>();
                     friendsLoggedInUser.add(uid2);
                 }
-                if(!friendsUserInList.contains(currUser.getUser_id())) {
+
+                if(friendsUserInList!=null) {
+                    if (!friendsUserInList.contains(currUser.getUser_id())) {
+                        friendsUserInList.add(currUser.getUser_id());
+                    }
+                }else{
+                    friendsUserInList = new ArrayList<String>();
                     friendsUserInList.add(currUser.getUser_id());
                 }
                 currUser.setFriends(friendsLoggedInUser);
                 currUser.setReceivedReq(requestList);
                 user.setFriends(friendsUserInList);
+                user.setSentReq(sentReqList);
                 mUserRef.child(uid2).setValue(user);
                 mUserRef.child(uid).setValue(currUser);
                 v.setVisibility(View.INVISIBLE);

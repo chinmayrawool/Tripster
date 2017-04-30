@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -39,7 +40,8 @@ import java.util.UUID;
 
 public class ProfileEditActivity extends AppCompatActivity {
 
-    EditText editTextFname,editTextLname,editTextGender;
+    EditText editTextFname,editTextLname;
+    Spinner genderSpinner;
     ImageView imageViewProfile;
     Button btnCancel,btnSave;
     String userID;
@@ -65,7 +67,7 @@ public class ProfileEditActivity extends AppCompatActivity {
 
         editTextFname = (EditText) findViewById(R.id.et_fname_profile);
         editTextLname = (EditText) findViewById(R.id.et_lname_profile);
-        editTextGender = (EditText) findViewById(R.id.et_gender_profile);
+        genderSpinner = (Spinner) findViewById(R.id.sp_gender_profile);
         imageViewProfile = (ImageView) findViewById(R.id.imageViewProfile);
         btnCancel = (Button) findViewById(R.id.btn_cancelProfile);
         btnSave = (Button) findViewById(R.id.btn_editProfile);
@@ -103,7 +105,15 @@ public class ProfileEditActivity extends AppCompatActivity {
                     currUser = usr;
                     editTextFname.setText(currUser.getUserfirstname());
                     editTextLname.setText(currUser.getUserlastname());
-                    editTextGender.setText(currUser.getGender());
+                    String gender = currUser.getGender();
+                    switch(gender) {
+                        case "Male":
+                            genderSpinner.setSelection(0);
+                            break;
+                        case "Female":
+                            genderSpinner.setSelection(1);
+                            break;
+                    }
 //                    Glide.with(ProfileEditActivity.this).
                     Glide.with(ProfileEditActivity.this).using(new FirebaseImageLoader()).load(imageRef.child(currUser.getImage_url())).into(imageViewProfile);
                 }
@@ -146,14 +156,14 @@ public class ProfileEditActivity extends AppCompatActivity {
                     Toast.makeText(ProfileEditActivity.this, "First Name field is empty", Toast.LENGTH_LONG).show();
                 }else if (editTextLname.getText().toString().equals("")) {
                     Toast.makeText(ProfileEditActivity.this, "Last Name field is empty", Toast.LENGTH_LONG).show();
-                }else if (editTextGender.getText().toString().equals("")) {
+                }/*else if (editTextGender.getText().toString().equals("")) {
                     Toast.makeText(ProfileEditActivity.this, "Choose a gender", Toast.LENGTH_LONG).show();
-                }/*else if ("profile".equals(imageViewProfile.getTag())) {
+                }*//*else if ("profile".equals(imageViewProfile.getTag())) {
                     Toast.makeText(ProfileEditActivity.this, "Select Image", Toast.LENGTH_LONG).show();}*/
                 else {
                     currUser.setUserfirstname(editTextFname.getText().toString());
                     currUser.setUserlastname(editTextLname.getText().toString());
-                    currUser.setGender(editTextGender.getText().toString());
+                    currUser.setGender(genderSpinner.getSelectedItem().toString());
                     //update image url
                     final String image_id = String.valueOf(UUID.randomUUID());
                     final String path = "images/"+userID+ image_id+".jpg";

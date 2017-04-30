@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,8 +39,9 @@ import java.util.UUID;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    private EditText editTextEmail , editTextFname, editTextLname,editTextGender;
+    private EditText editTextEmail , editTextFname, editTextLname;
     private EditText editTextPassword, editTextConfirmPassword;
+    private Spinner genderSpinner;
     ImageView profilePicIV;
     private Button btnSignUp, btnCancel;
     private FirebaseAuth mAuth;
@@ -60,7 +62,7 @@ public class SignUpActivity extends AppCompatActivity {
         editTextPassword =(EditText)findViewById(R.id.et_passwordSignUp);
         editTextFname =(EditText)findViewById(R.id.et_fname_signup);
         editTextLname=(EditText)findViewById(R.id.et_lname_signup);
-        editTextGender=(EditText)findViewById(R.id.et_gender_signup);
+        genderSpinner = (Spinner) findViewById(R.id.sp_gender_signup);
         editTextConfirmPassword =(EditText)findViewById(R.id.et_confirmpasswordSignUp);
         profilePicIV = (ImageView) findViewById(R.id.imageViewProfile);
         btnSignUp =(Button) findViewById(R.id.btn_signUp);
@@ -98,7 +100,7 @@ public class SignUpActivity extends AppCompatActivity {
                             .setDisplayName(name).build();
                     user.updateProfile(profileUpdates);
 
-                    writeUser(user.getUid(),editTextEmail.getText().toString(),  editTextFname.getText().toString(), editTextLname.getText().toString(), editTextGender.getText().toString(), profilePicIV);
+                    writeUser(user.getUid(),editTextEmail.getText().toString(),  editTextFname.getText().toString(), editTextLname.getText().toString(), genderSpinner.getSelectedItem().toString(), profilePicIV);
                     finish();
                 } else {
                     // User is signed out
@@ -130,13 +132,13 @@ public class SignUpActivity extends AppCompatActivity {
                     Toast.makeText(SignUpActivity.this, "Last Name field is empty", Toast.LENGTH_LONG).show();
                 }else if (editTextConfirmPassword.getText().toString().equals("")) {
                     Toast.makeText(SignUpActivity.this, "Confirm Password field is empty", Toast.LENGTH_LONG).show();}
-                else if (editTextGender.getText().toString().equals("")) {
+                /*else if (editTextGender.getText().toString().equals("")) {
                     Toast.makeText(SignUpActivity.this, "Choose a gender", Toast.LENGTH_LONG).show();
-                }else if ("profile".equals(profilePicIV.getTag())) {
+                }*/else if ("profile".equals(profilePicIV.getTag())) {
                     Toast.makeText(SignUpActivity.this, "Select Image", Toast.LENGTH_LONG).show();}
                 else {
 
-                    createAccount(editTextEmail.getText().toString(), editTextPassword.getText().toString(), editTextFname.getText().toString(), editTextLname.getText().toString(),editTextGender.getText().toString(),profilePicIV);
+                    createAccount(editTextEmail.getText().toString(), editTextPassword.getText().toString(), editTextFname.getText().toString(), editTextLname.getText().toString(),genderSpinner.getSelectedItem().toString(),profilePicIV);
                 }
 
             }

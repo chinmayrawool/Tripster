@@ -1,6 +1,7 @@
 package com.mad.tripster;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * Created by Chinmay Rawool on 4/10/2017.
@@ -81,4 +82,11 @@ public class MessageObj {
                 ", comments=" + comments +
                 '}';
     }
+
+    public static Comparator<MessageObj> timeComp = new Comparator<MessageObj>() {
+        @Override
+        public int compare(MessageObj o1, MessageObj o2) {
+            return (int) (o1.getTime() - o2.getTime());
+        }
+    };
 }
