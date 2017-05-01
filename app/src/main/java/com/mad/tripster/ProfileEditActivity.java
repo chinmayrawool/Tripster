@@ -194,7 +194,9 @@ public class ProfileEditActivity extends AppCompatActivity {
                     currUser.setImage_url(path);
 
                     mUserRef.child(userID).setValue(currUser);
+                    finish();
                 }
+
             }
         });
 

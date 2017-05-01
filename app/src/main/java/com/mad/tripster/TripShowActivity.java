@@ -110,6 +110,7 @@ public class TripShowActivity extends AppCompatActivity {
                 if(usr.getUser_id().equals(uid)){
                     currUser = usr;
                     list =  getJoinTrip();
+                    Log.d("demo","listener added");
                     mTripRef.addChildEventListener(mTripEventListener);
                 }
             }
@@ -268,9 +269,14 @@ public class TripShowActivity extends AppCompatActivity {
 
                 LatLng temp = place.getLatLng();
                 PlaceObject placeObject = new PlaceObject(String.valueOf(System.currentTimeMillis()),String.valueOf(place.getName()),temp.latitude,temp.longitude,String.valueOf(place.getAddress()));
+                if(placeObjectsList==null){
+                    placeObjectsList = new ArrayList<>();
+                }
                 placeObjectsList.add(placeObject);
 
                 currTrip.setPlaceObjects(placeObjectsList);
+                mTripRef.child(currTrip.getTrip_id()).setValue(currTrip);
+
 
                 displayPlace();
             }

@@ -17,6 +17,9 @@ public class PlaceObject implements Serializable{
     double place_lat, place_lng;
     String address;
 
+    public PlaceObject() {
+    }
+
     public PlaceObject(String place_id, String place_name, double place_lat, double place_lng, String address) {
         this.place_id = place_id;
         this.place_name = place_name;
