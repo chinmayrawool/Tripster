@@ -63,7 +63,7 @@ public class PlaceAdapter extends ArrayAdapter<PlaceObject> {
         tv_title.setText(place.getPlace_name()+"");
         //tv_title.setBackgroundColor(Color.GRAY);
         TextView tv_price = (TextView) convertView.findViewById(R.id.tv_price);
-        tv_price.setText("Latitude: "+place.getPlace_lat()+" Longitude: "+place.getPlace_lng());
+        tv_price.setText(place.getAddress());//"Latitude: "+place.getPlace_lat()+" Longitude: "+place.getPlace_lng(
         final ImageView imageButton = (ImageView) convertView.findViewById(R.id.iv_star);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
