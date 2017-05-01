@@ -185,10 +185,12 @@ public class TripsFragment extends Fragment {
                     Log.d("demo","trip created by you "+trip.getTrip_id());
                     trips.add(trip);
                 }else{
-                    for(String id: usersFriends){
-                        if(trip.getCreated_by().equals(id)){
-                            Log.d("demo","trip created by your friends "+trip.getTrip_id());
-                            trips.add(trip);
+                    if(usersFriends!=null) {
+                        for (String id : usersFriends) {
+                            if (trip.getCreated_by().equals(id)) {
+                                Log.d("demo", "trip created by your friends " + trip.getTrip_id());
+                                trips.add(trip);
+                            }
                         }
                     }
                 }
