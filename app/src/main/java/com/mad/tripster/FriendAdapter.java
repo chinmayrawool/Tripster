@@ -122,25 +122,27 @@ public class FriendAdapter extends ArrayAdapter<User> {
             Log.d("demo","position: Odd");
         }
 
-        if(currUser.getSentReq()!=null){
-            sentRequests = currUser.getSentReq();
-            for(String id: sentRequests) {
-                Log.d("demo","sent request to id: "+id);
-                Log.d("demo","list user's id:"+user.getUser_id());
-                if (user.getUser_id().equals(id)){
-                    requestBtn.setText("Request Pending");
-                    requestBtn.setEnabled(false);
+        if(currUser!=null) {
+            if (currUser.getSentReq() != null) {
+                sentRequests = currUser.getSentReq();
+                for (String id : sentRequests) {
+                    Log.d("demo", "sent request to id: " + id);
+                    Log.d("demo", "list user's id:" + user.getUser_id());
+                    if (user.getUser_id().equals(id)) {
+                        requestBtn.setText("Request Pending");
+                        requestBtn.setEnabled(false);
+                    }
                 }
             }
-        }
 
-        if(currUser.getFriends()!=null){
-            friends = currUser.getFriends();
-            for(String id: friends) {
-                Log.d("demo","sent request to id: "+id);
-                Log.d("demo","list user's id:"+user.getUser_id());
-                if (user.getUser_id().equals(id)){
-                    requestBtn.setVisibility(View.INVISIBLE);
+            if (currUser.getFriends() != null) {
+                friends = currUser.getFriends();
+                for (String id : friends) {
+                    Log.d("demo", "sent request to id: " + id);
+                    Log.d("demo", "list user's id:" + user.getUser_id());
+                    if (user.getUser_id().equals(id)) {
+                        requestBtn.setVisibility(View.INVISIBLE);
+                    }
                 }
             }
         }

@@ -24,7 +24,6 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link FriendsFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  */
 public class FriendsFragment extends Fragment {
@@ -90,6 +89,7 @@ public class FriendsFragment extends Fragment {
         mFriendListView = (ListView) getActivity().findViewById(R.id.listView_users);
         mFriendAdapter = new FriendAdapter(getContext(), R.layout.row_layout, users);
         mFriendListView.setAdapter(mFriendAdapter);
+        mFriendAdapter.setNotifyOnChange(true);
 
         mUserListener = new ChildEventListener() {
             @Override
@@ -104,6 +104,15 @@ public class FriendsFragment extends Fragment {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                User user = dataSnapshot.getValue(User.class);
+                Log.d("demo","Child changed: "+user.toString());
+                mFriendAdapter = new FriendAdapter(getContext(), R.layout.row_layout, users);
+                mFriendListView.setAdapter(mFriendAdapter);
+                mFriendAdapter.setNotifyOnChange(true);
+                //users.add(user);
+                /*if(!user.getUser_id().equals(uid)){
+                    mFriendAdapter.add(user);
+                }*/
 
             }
 
