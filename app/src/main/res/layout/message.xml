@@ -3,35 +3,42 @@
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="10dp">
+    android:padding="5dp">
 
-
-    <TextView
-        android:id="@+id/messageText"
-        android:layout_alignParentStart="true"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="2dp"/>
+        android:layout_margin="5dp"
+        android:orientation="vertical"
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/messageImage"
-        android:layout_below="@+id/messageText"
-        android:padding="2dp"/>
-    <TextView
-        android:id="@+id/messageName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/messageImage"
-        android:text="Name"
-        android:textStyle="bold" />
-    <TextView
-        android:id="@+id/messageTime"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/messageImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="time"/>
+        android:background="@color/message">
+        <TextView
+            android:id="@+id/messageText"
+            android:layout_alignParentStart="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="2dp"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/messageImage"
+            android:layout_below="@+id/messageText" />
+        <TextView
+            android:id="@+id/messageName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/messageImage"
+            android:text="Name"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/messageTime"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/messageImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="time"/>
+    </LinearLayout>
+
 </RelativeLayout>
