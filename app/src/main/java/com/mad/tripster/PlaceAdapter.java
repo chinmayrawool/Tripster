@@ -1,6 +1,7 @@
 package com.mad.tripster;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,7 +49,8 @@ public class PlaceAdapter extends ArrayAdapter<PlaceObject> {
         }
         place = mData.get(position);
         TextView tv_title = (TextView) convertView.findViewById(R.id.tv_title);
-        tv_title.setText("Title: "+place.getPlace_name()+"");
+        tv_title.setText(place.getPlace_name()+"");
+        //tv_title.setBackgroundColor(Color.GRAY);
         TextView tv_price = (TextView) convertView.findViewById(R.id.tv_price);
         tv_price.setText("LatLng: "+new LatLng(place.getPlace_lat(),place.getPlace_lng()));
         final ImageButton imageButton = (ImageButton)convertView.findViewById(R.id.iv_star);

@@ -11,13 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20dp"
-        android:id="@+id/trip_title"/>
+        android:id="@+id/trip_title"
+        android:gravity="center"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="15dp"
-        android:id="@+id/trip_location"/>
+        android:id="@+id/trip_location"
+        android:gravity="center"/>
 
     <ImageView
         android:layout_width="match_parent"
@@ -53,7 +55,8 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:id="@+id/ListView_places">
+        android:id="@+id/ListView_places"
+        android:layout_marginTop="10dp">
 
     </ListView>
     <LinearLayout

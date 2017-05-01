@@ -1,6 +1,7 @@
 package com.mad.tripster;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -113,6 +114,13 @@ public class FriendAdapter extends ArrayAdapter<User> {
         user = mData.get(position);
         ImageView imageView = (ImageView)convertView.findViewById(R.id.imageViewIcon);
         final Button requestBtn = (Button) convertView.findViewById(R.id.btn_send_request);
+        if(position%2==0){
+            convertView.setBackgroundColor(Color.rgb(240,240,240));
+            Log.d("demo","position: Even");
+        }else{
+            convertView.setBackgroundColor(Color.WHITE);
+            Log.d("demo","position: Odd");
+        }
 
         if(currUser.getSentReq()!=null){
             sentRequests = currUser.getSentReq();

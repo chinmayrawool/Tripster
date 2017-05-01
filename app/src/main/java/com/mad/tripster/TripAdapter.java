@@ -2,6 +2,7 @@ package com.mad.tripster;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -76,7 +77,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //View v =  LayoutInflater.from(parent.getContext()).inflate(R.layout.row_layout, parent, false);
         View v =  LayoutInflater.from(parent.getContext()).inflate(R.layout.grid_layout, parent, false);
-
+        v.setBackgroundColor(Color.rgb(179,243,249));
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
