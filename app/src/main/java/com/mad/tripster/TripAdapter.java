@@ -103,6 +103,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
             e.printStackTrace();
         }
         //Picasso.with(mContext).load(trip.getImage_url()).into(iv);
+        Log.d("demo","loading image");
         Glide.with(mContext).using(new FirebaseImageLoader()).load(imageRef.child(trip.getImage_url())).into(iv);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

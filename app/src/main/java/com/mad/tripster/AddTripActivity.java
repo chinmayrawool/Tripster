@@ -81,6 +81,7 @@ public class AddTripActivity extends AppCompatActivity {
                 }else if ("profile".equals(coverPicIV.getTag())) {
                     Toast.makeText(AddTripActivity.this, "Select Image", Toast.LENGTH_LONG).show();}
                 else {
+                    Log.d("demo","Adding New trip");
                     final String image_id = String.valueOf(UUID.randomUUID());
                     final String path = "images/"+uid+ image_id+".jpg";
                     StorageReference imageRef = storage.getReference(path);

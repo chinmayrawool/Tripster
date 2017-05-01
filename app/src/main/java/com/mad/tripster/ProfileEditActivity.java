@@ -215,6 +215,28 @@ public class ProfileEditActivity extends AppCompatActivity {
                 Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                 imageViewProfile = (ImageView) findViewById(R.id.imageViewProfile);
                 imageViewProfile.setImageBitmap(selectedImage);
+
+                final String image_id = String.valueOf(UUID.randomUUID());
+                final String path = "images/"+userID+ image_id+".jpg";
+                StorageReference imageRef = storage.getReference(path);
+                UploadTask uploadTask = imageRef.putFile(imageUri);
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                    }
+                });
+
+                currUser.setImage_id(image_id.toString());
+                currUser.setImage_url(path);
+
+                mUserRef.child(userID).setValue(currUser);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
