@@ -33,6 +33,7 @@ public class ContentActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+
    /* private FirebaseDatabase mDatabase;
     private DatabaseReference mUsersRef;
     private ChildEventListener mUserListener;
@@ -79,7 +80,9 @@ public class ContentActivity extends AppCompatActivity
             }
         };
 
-        //tv = (TextView) findViewById(R.id.textViewHello);
+        tv = (TextView) findViewById(R.id.tv_header);
+
+
         //tv.setText(mAuth.getCurrentUser().getEmail());
         Log.d("demo",mAuth.getCurrentUser().getEmail()+" "+mAuth.getCurrentUser().getUid());
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -200,7 +203,7 @@ public class ContentActivity extends AppCompatActivity
             //tv.setText("Profile page");
         } else if (id == R.id.nav_logout) {
             Log.d("demo","Logout clicked");
-            //tv.setText("Profile page");
+            //tv.setText("Logout page");
             mAuth.signOut();
             Intent intent = new Intent(ContentActivity.this,LoginActivity.class);
             startActivity(intent);

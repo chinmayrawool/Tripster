@@ -10,7 +10,10 @@
     tools:context="com.mad.tripster.ContentActivity"
     tools:showIn="@layout/app_bar_main"
     android:orientation="vertical">
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_header"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
