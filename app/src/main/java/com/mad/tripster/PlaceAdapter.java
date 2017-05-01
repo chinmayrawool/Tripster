@@ -16,6 +16,12 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -30,13 +36,18 @@ public class PlaceAdapter extends ArrayAdapter<PlaceObject> {
     int mResource;
     ArrayList<PlaceObject> mData;
     PlaceObject place;
-    //ListView listView;
-    //PlaceAdapter placeAdapter;
-    public PlaceAdapter(Context context, int resource, ArrayList<PlaceObject> places) {
+    String tripId;
+    private FirebaseDatabase mDatabase;
+    private DatabaseReference mTripsRef;
+
+    public PlaceAdapter(Context context, int resource, ArrayList<PlaceObject> places, String tripId) {
         super(context, resource, places);
         this.mContext=context;
         this.mResource= resource;
         this.mData = places;
+        this.tripId = tripId;
+        mDatabase = FirebaseDatabase.getInstance();
+        mTripsRef = mDatabase.getReference().child("trips");
     }
 
     @NonNull
@@ -59,9 +70,38 @@ public class PlaceAdapter extends ArrayAdapter<PlaceObject> {
             public void onClick(View view) {
                 Toast.makeText(mContext, "btn clicked"+position, Toast.LENGTH_SHORT).show();
                 //Remove place from the database
-                //TODO
+                /*place = mData.get(position);
+                //mData.remove(mData.indexOf(place));
+                //mTripsRef.child(tripId).child().removeValue();
+                Query queryRef = mTripsRef.child(tripId).child("placeObjects").orderByChild("place_id").equalTo(place.getPlace_id());
 
-                Log.d("demo","btn clicked:"+position);
+                queryRef.addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot snapshot, String previousChild) {
+                        snapshot.getRef().setValue(null);
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+                Log.d("demo","btn clicked:"+position);*/
 
             }
         });

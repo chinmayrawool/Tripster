@@ -313,7 +313,7 @@ public class TripShowActivity extends AppCompatActivity {
             if (placeObjectsList.size() != 0) {
 
                 listView = (ListView) findViewById(R.id.ListView_places);
-                placeAdapter = new PlaceAdapter(TripShowActivity.this, R.layout.row_layout_place, placeObjectsList);
+                placeAdapter = new PlaceAdapter(TripShowActivity.this, R.layout.row_layout_place, placeObjectsList,tripId);
                 placeAdapter.setNotifyOnChange(true);
 
                 listView.setClickable(true);
