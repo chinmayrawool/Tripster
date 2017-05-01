@@ -21,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -28,6 +30,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -36,34 +41,82 @@ public class ContentActivity extends AppCompatActivity
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
-   /* private FirebaseDatabase mDatabase;
-    private DatabaseReference mUsersRef;
-    private ChildEventListener mUserListener;
-    ArrayList<User> users;
-    private ListView mFriendListView;
-    private FriendAdapter mFriendAdapter;*/
+    FirebaseDatabase db;
+    DatabaseReference mUserRef;
+    ChildEventListener mUserListener;
+    FirebaseStorage storage;
+    StorageReference imageRef;
 
     TextView tv;
     ImageView ivProfile;
     TextView userName;
     TextView userGender;
+    String userID;
+    User currUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //users = new ArrayList<User>();
-        ivProfile = (ImageView) findViewById(R.id.imageViewProfileHeader);
-        userName = (TextView) findViewById(R.id.textViewUserName);
-        userGender = (TextView) findViewById(R.id.textViewUserGender);
-
-        //TODO
 
 
+        NavigationView navHeaderView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navHeaderView.getHeaderView(0);
 
+        db = FirebaseDatabase.getInstance();
+        mUserRef = db.getReference().child("users");
         mAuth = FirebaseAuth.getInstance();
+
+        storage = FirebaseStorage.getInstance();
+        imageRef = storage.getReference();
+        //users = new ArrayList<User>();
+        ivProfile = (ImageView) headerView.findViewById(R.id.imageViewProfileHeader);
+        userName = (TextView) headerView.findViewById(R.id.textViewUserName);
+        userGender = (TextView) headerView.findViewById(R.id.textViewUserGender);
+
+        userID = mAuth.getCurrentUser().getUid();
+
+        mUserListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                User usr = dataSnapshot.getValue(User.class);
+                if(usr.getUser_id().equals(userID)){
+                    currUser = usr;
+                    userName.setText(currUser.getUserfirstname()+ " "+currUser.getUserlastname());
+                    userGender.setText(currUser.getGender());
+                    //Picasso.with(getApplicationContext()).load(currUser.getImage_url()).into(ivProfile);
+                    Glide.with(ContentActivity.this).using(new FirebaseImageLoader()).load(imageRef.child(currUser.getImage_url())).into(ivProfile);
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+
+        mUserRef.addChildEventListener(mUserListener);
+
+
+
         /*mDatabase = FirebaseDatabase.getInstance();
         mUsersRef = mDatabase.getReference().child("users");*/
 
@@ -127,35 +180,7 @@ public class ContentActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        /*mUserListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                User user = dataSnapshot.getValue(User.class);
-                users.add(user);
-            }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-
-        mUsersRef.addChildEventListener(mUserListener);*/
     }
 
     @Override
