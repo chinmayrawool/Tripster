@@ -52,17 +52,28 @@ public class PlaceAdapter extends ArrayAdapter<PlaceObject> {
         tv_title.setText(place.getPlace_name()+"");
         //tv_title.setBackgroundColor(Color.GRAY);
         TextView tv_price = (TextView) convertView.findViewById(R.id.tv_price);
-        tv_price.setText("LatLng: "+new LatLng(place.getPlace_lat(),place.getPlace_lng()));
-        final ImageButton imageButton = (ImageButton)convertView.findViewById(R.id.iv_star);
+        tv_price.setText("Latitude: "+place.getPlace_lat()+" Longitude: "+place.getPlace_lng());
+        final ImageView imageButton = (ImageView) convertView.findViewById(R.id.iv_star);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(mContext, "btn clicked"+position, Toast.LENGTH_SHORT).show();
                 //Remove place from the database
+                //TODO
+
                 Log.d("demo","btn clicked:"+position);
 
             }
         });
+
+        if(position%2==0){
+            convertView.setBackgroundColor(Color.rgb(240,240,240));
+            Log.d("demo","position: Even");
+        }else{
+            convertView.setBackgroundColor(Color.WHITE);
+            Log.d("demo","position: Odd");
+        }
+
         convertView.findViewById(R.id.iv_star).setFocusable(false);
         convertView.findViewById(R.id.iv_star).setFocusableInTouchMode(false);
         convertView.setClickable(true);

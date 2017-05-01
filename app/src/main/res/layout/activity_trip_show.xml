@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.mad.tripster.TripShowActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/tripBackground">
 
     <TextView
         android:layout_width="match_parent"
@@ -24,31 +25,41 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="180dp"
-        android:id="@+id/trip_cover"/>
+        android:id="@+id/trip_cover"
+        android:padding="10dp" />
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:gravity="center">
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Join"
-            android:id="@+id/trip_join"/>
+            android:id="@+id/trip_join"
+            android:background="@color/btnTrip"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Chat Room"
-            android:id="@+id/trip_chatroom"/>
+            android:id="@+id/trip_chatroom"
+            android:background="@color/btnTrip"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Add Places"
-            android:id="@+id/trip_places"/>
+            android:id="@+id/trip_places"
+            android:background="@color/btnTrip"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"/>
 
     </LinearLayout>
 
@@ -61,21 +72,27 @@
     </ListView>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:gravity="center">
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="In-App Map"
-            android:id="@+id/btn_inapp"/>
+            android:id="@+id/btn_inapp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@color/btnTrip"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Google Maps"
-            android:id="@+id/btn_extapp"/>
+            android:id="@+id/btn_extapp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@color/btnTrip"/>
     </LinearLayout>
 
 

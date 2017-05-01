@@ -4,29 +4,31 @@
     android:id="@+id/activity_chat_room"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.mad.tripster.ChatRoomActivity">
+
+    tools:context="com.mad.tripster.ChatRoomActivity"
+    android:background="@color/tripBackground">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:id="@+id/topHeader"
         android:layout_alignParentTop="true"
+        android:background="@color/btnTrip"
         >
         <TextView
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="dummyText"
-            android:layout_alignParentLeft="true"/>
+            android:layout_alignParentLeft="true"
+            android:textSize="20dp"
+            android:textColor="@color/headerColor"/>
         <ImageView
             android:id="@+id/logout"
             android:layout_width="32sp"
             android:layout_height="32sp"
             android:layout_alignParentRight="true"
-            android:src="@drawable/logout"/>
+            android:src="@drawable/logout"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -34,25 +36,31 @@
         android:layout_height="wrap_content"
         android:id="@+id/bottomFooter"
         android:layout_alignParentBottom="true"
+        android:background="@color/headerColor"
         >
         <ImageView
             android:layout_width="32sp"
             android:layout_height="32sp"
             android:src="@drawable/gallery"
             android:layout_alignParentEnd="true"
-            android:id="@+id/addImage"/>
+            android:id="@+id/addImage"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"/>
         <ImageView
             android:layout_width="32sp"
             android:layout_height="32sp"
             android:src="@drawable/send"
             android:id="@+id/addMessage"
-            android:layout_toLeftOf="@+id/addImage"/>
+            android:layout_toLeftOf="@+id/addImage"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"/>
         <EditText
             android:id="@+id/messageText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/addMessage"
-            android:layout_alignParentLeft="true"/>
+            android:layout_alignParentLeft="true"
+            />
     </RelativeLayout>
 
     <ScrollView

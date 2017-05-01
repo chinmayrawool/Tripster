@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -42,17 +44,31 @@ public class ContentActivity extends AppCompatActivity
     private FriendAdapter mFriendAdapter;*/
 
     TextView tv;
+    ImageView ivProfile;
+    TextView userName;
+    TextView userGender;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //users = new ArrayList<User>();
+        ivProfile = (ImageView) findViewById(R.id.imageViewProfileHeader);
+        userName = (TextView) findViewById(R.id.textViewUserName);
+        userGender = (TextView) findViewById(R.id.textViewUserGender);
+
+        //TODO
+
+
 
         mAuth = FirebaseAuth.getInstance();
         /*mDatabase = FirebaseDatabase.getInstance();
         mUsersRef = mDatabase.getReference().child("users");*/
+
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container,new FriendsFragment(),"frag_friends").commit();
 
         if(mAuth.getCurrentUser()==null){
             //Intent to login activity
@@ -81,6 +97,8 @@ public class ContentActivity extends AppCompatActivity
         };
 
         tv = (TextView) findViewById(R.id.tv_header);
+        tv.setText("USERS");
+        tv.setGravity(Gravity.CENTER);
 
 
         //tv.setText(mAuth.getCurrentUser().getEmail());
@@ -181,12 +199,14 @@ public class ContentActivity extends AppCompatActivity
         if (id == R.id.nav_trip) {
             // Handle the camera action
             Log.d("demo","Trips clicked");
-            //tv.setText("trips page");
+            tv.setText("TRIPS");
+            tv.setGravity(Gravity.CENTER);
             getFragmentManager().beginTransaction()
                     .replace(R.id.container,new TripsFragment(),"frag_trips").commit();
         } else if (id == R.id.nav_friends) {
             Log.d("demo","Friends clicked");
-            //tv.setText("Friends page");
+            tv.setText("USERS");
+            tv.setGravity(Gravity.CENTER);
             getFragmentManager().beginTransaction()
                     .replace(R.id.container,new FriendsFragment(),"frag_friends").commit();
             //Log.d("demo",users.toString());
@@ -194,7 +214,8 @@ public class ContentActivity extends AppCompatActivity
             Log.d("demo","Requests clicked");
             getFragmentManager().beginTransaction()
                     .replace(R.id.container,new RequestsFragment(),"frag_requests").commit();
-            //tv.setText("Request page");
+            tv.setText("REQUESTS");
+            tv.setGravity(Gravity.CENTER);
         } else if (id == R.id.nav_profile) {
             Log.d("demo","Profile clicked");
             Intent intent = new Intent(ContentActivity.this,ProfileEditActivity.class);

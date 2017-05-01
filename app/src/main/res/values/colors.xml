@@ -4,5 +4,10 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-
+    <color name="backgroundColor">#4CCE5D</color>
+    <color name="headerColor">#F5F5F5</color>
+    <color name="tripBackground">#dee4fc</color>
+    <color name="btnTrip">#4a6eef</color>
+    <color name="EditHeader">#00135b</color>
+    <color name="EditBack">#b8f8f9</color>
 </resources>

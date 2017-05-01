@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="7dp">
+    android:padding="7dp"
+    android:weightSum="1">
 
     <ImageView
         android:layout_width="70dp"
@@ -11,17 +12,18 @@
         android:padding="5dp"/>
 
     <TextView
-        android:layout_width="201dp"
+        android:layout_width="190dp"
         android:layout_height="70dp"
         android:id="@+id/textViewContent"
         android:paddingLeft="2dp"
         android:paddingRight="2dp"/>
 
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/btn_send_request"
         android:text="Add Friend"
-        android:layout_gravity="center_vertical" />
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1" />
 
 </LinearLayout>

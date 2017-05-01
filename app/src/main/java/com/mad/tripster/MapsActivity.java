@@ -8,6 +8,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -21,6 +22,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Polyline polyline;
     PolylineOptions polylineOptions;
     ArrayList<LatLng> listOfPoints;
+    LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,17 +61,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addMarker(new MarkerOptions().position(mumbai).title("Marker in Mumbai"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(mumbai));*/
         LatLng temp;
+
+
         if(placeObjectArrayList!=null) {
-            for (int i = 0; i < placeObjectArrayList.size(); i++) {
-                temp = new LatLng(placeObjectArrayList.get(i).getPlace_lat(), placeObjectArrayList.get(i).getPlace_lng());
+            for(int i =0;i<placeObjectArrayList.size();i++){
+                temp = new LatLng(placeObjectArrayList.get(i).getPlace_lat(),placeObjectArrayList.get(i).getPlace_lng());
                 mMap.addMarker(new MarkerOptions().position(temp).title(placeObjectArrayList.get(i).getPlace_name()));
                 listOfPoints.add(temp);
                 polyline.setPoints(listOfPoints);
-
+                builder.include(temp);
+                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 10));
             }
-
+            listOfPoints.add(new LatLng(placeObjectArrayList.get(0).getPlace_lat(),placeObjectArrayList.get(0).getPlace_lng()));
+            polyline.setPoints(listOfPoints);
             StringBuilder sb = new StringBuilder();
-            sb.append("origin=" + placeObjectArrayList.get(0).getPlace_lat() + "," + placeObjectArrayList.get(0).getPlace_lng());
+            sb.append("origin="+placeObjectArrayList.get(0).getPlace_lat()+","+placeObjectArrayList.get(0).getPlace_lng());
             String origin = sb.toString();
             sb = new StringBuilder();
         }

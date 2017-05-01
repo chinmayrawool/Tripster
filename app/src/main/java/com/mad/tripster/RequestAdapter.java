@@ -1,6 +1,7 @@
 package com.mad.tripster;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -187,6 +188,15 @@ public class RequestAdapter extends ArrayAdapter<User> {
 
         convertView.setClickable(true);
         convertView.setLongClickable(true);
+
+        if(position%2==0){
+            convertView.setBackgroundColor(Color.rgb(240,240,240));
+            Log.d("demo","position: Even");
+        }else{
+            convertView.setBackgroundColor(Color.WHITE);
+            Log.d("demo","position: Odd");
+        }
+
         return convertView;
     }
     @Override
