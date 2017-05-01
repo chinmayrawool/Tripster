@@ -31,9 +31,8 @@
         </LinearLayout>
 
         <ImageView
-            android:layout_width="match_parent"
+            android:layout_width="36dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
             android:id="@+id/iv_delete_icon"
             android:src="@drawable/delete"
             android:visibility="invisible"/>
