@@ -114,7 +114,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                             genderSpinner.setSelection(1);
                             break;
                     }
-//                    Glide.with(ProfileEditActivity.this).
+
                     Glide.with(ProfileEditActivity.this).using(new FirebaseImageLoader()).load(imageRef.child(currUser.getImage_url())).into(imageViewProfile);
                 }
             }
@@ -205,20 +205,6 @@ public class ProfileEditActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK){ // && null != data) {
-            /*selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
-
-            Cursor cursor = getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
-            cursor.moveToFirst();
-
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
-            cursor.close();
-
-            //  ImageButton imageReceipt = (ImageButton) findViewById(R.id.imageButtonRecipt);
-            imageViewProfile = (ImageView) findViewById(R.id.imageViewProfile);
-            imageViewProfile.setImageBitmap(BitmapFactory.decodeFile(picturePath));*/
 
 
             try {

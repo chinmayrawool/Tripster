@@ -3,6 +3,10 @@ package com.mad.tripster;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +18,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -23,9 +29,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -49,6 +61,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     FirebaseAuth.AuthStateListener mAuthListener;
     FirebaseStorage storage;
     StorageReference storageRef;
+    StorageReference imageRef;
     //ValueEventListener v;
     String userDisplayName;
     String tripId;
@@ -57,6 +70,8 @@ public class ChatRoomActivity extends AppCompatActivity {
     ChildEventListener mUserListener;
     FirebaseAuth mAuth;
     User currUser;
+    View view1;
+
     //FirebaseMessageHandler handler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +88,8 @@ public class ChatRoomActivity extends AppCompatActivity {
         tv_name = (TextView) findViewById(R.id.user_name);
         messageText = (EditText) findViewById(R.id.messageText);
         chatslayout = (LinearLayout) findViewById(R.id.linearChats);
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference();
+        storage = FirebaseStorage.getInstance();
+        imageRef = storage.getReference();
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
         Log.d("ChatActivity", user.toString());
@@ -131,10 +146,11 @@ public class ChatRoomActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //rootRef.removeEventListener(v);
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_PICK);
-                startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST);
+                Intent i = new Intent(
+                        Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                i.setType("image/*");
+                startActivityForResult(i, PICK_IMAGE_REQUEST);
             }
         });
 
@@ -212,6 +228,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     }
 
     ArrayList<MessageObj> messages = new ArrayList<>();
+
     public void onReturnMessage(ArrayList<MessageObj> msgs) {
         messages = msgs;
         Log.d("demo","UserID:");
@@ -224,7 +241,7 @@ public class ChatRoomActivity extends AppCompatActivity {
             if(delMsgList.contains(m.getId())){
                 Log.d("demo","Msg deleted");
             }else{
-                final View view1 = getLayoutInflater().inflate(R.layout.message, null);
+                view1 = getLayoutInflater().inflate(R.layout.message, null);
                 TextView textViewname = (TextView) view1.findViewById(R.id.messageName);
                 TextView textViewtext = (TextView) view1.findViewById(R.id.messageText);
                 TextView textViewtime = (TextView) view1.findViewById(R.id.messageTime);
@@ -239,9 +256,10 @@ public class ChatRoomActivity extends AppCompatActivity {
                     textViewtext.setText(m.getContent());
 
                 } else {
-                    Glide.with(this /* context */)
+                    //Glide.with(ProfileEditActivity.this).using(new FirebaseImageLoader()).load(imageRef.child(currUser.getImage_url())).into(imageViewProfile);
+                    Glide.with(this)
                             .using(new FirebaseImageLoader())
-                            .load(storageRef)
+                            .load(imageRef.child(m.getContent()))
                             .into(imageViewI);
                 }
                 final EditText input = new EditText(ChatRoomActivity.this);
@@ -300,6 +318,70 @@ public class ChatRoomActivity extends AppCompatActivity {
         return list;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ImageView imageViewI = (ImageView) view1.findViewById(R.id.messageImage);;
 
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK){
+
+            try {
+                Uri imageUri = data.getData();
+                InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                imageViewI = (ImageView) view1.findViewById(R.id.messageImage);
+                imageViewI.setImageBitmap(selectedImage);
+
+                final String image_id = String.valueOf(UUID.randomUUID());
+                final String path = "images/"+ image_id+".jpg";
+                StorageReference imageRef = storage.getReference(path);
+                UploadTask uploadTask = imageRef.putFile(imageUri);
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                    }
+                });
+
+                String id = String.valueOf(UUID.randomUUID());
+                MessageObj messageObj = new MessageObj(id,path,userDisplayName, System.currentTimeMillis(), false);
+                Log.d("demo","UserID:");
+                mMessagesRef.child(tripId).child(id).setValue(messageObj);
+                Log.d("demo","Message"+messageObj.toString());
+                /*Glide.with(this)
+                        .using(new FirebaseImageLoader())
+                        .load(imageRef.child(messageObj.getContent()))
+                        .into(imageViewI);*/
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            //imageViewProfile.setTag("imageReceived");
+
+
+
+            //Log.d("writeprofile", imageViewI.getTag().toString());
+            /*imageViewI.setDrawingCacheEnabled(true);
+            imageViewI.buildDrawingCache();
+            Bitmap bitmap = imageViewI.getDrawingCache();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data1 = baos.toByteArray();*/
+
+
+
+
+            //MessageObj(String id, String content, String name, long time, Boolean textFlag)
+
+
+        }
+    }
 
 }
