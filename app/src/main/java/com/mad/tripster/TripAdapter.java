@@ -36,6 +36,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
 
     private FirebaseDatabase mDatabase;
     private DatabaseReference mTripsRef;
+    private boolean createdByMe = false;
 
     public TripAdapter(Context mContext,List<Trip> mData, String userID) {
         this.mData = mData;
@@ -94,6 +95,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
         if(trip.getCreated_by().equals(userID)){
             ivDelete.setEnabled(true);
             ivDelete.setVisibility(View.VISIBLE);
+            createdByMe = true;
         }
 
         try {
@@ -104,6 +106,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
         }
         //Picasso.with(mContext).load(trip.getImage_url()).into(iv);
         Log.d("demo","loading image");
+        Log.d("demo","image url: "+trip.getImage_url());
         Glide.with(mContext).using(new FirebaseImageLoader()).load(imageRef.child(trip.getImage_url())).into(iv);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -111,6 +114,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
             public void onClick(View v) {
                 Intent intent = new Intent(mContext,TripShowActivity.class);
                 intent.putExtra("TripID",trip.getTrip_id());
+                intent.putExtra("TripCreated",createdByMe);
                 mContext.startActivity(intent);
                 /*Intent intent = new Intent(mContext,ChatRoomActivity.class);
                 intent.putExtra("TripID",trip.getTrip_id());

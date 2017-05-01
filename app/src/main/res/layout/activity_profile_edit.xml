@@ -15,6 +15,14 @@
         android:layout_marginBottom="20dp"
         android:layout_weight="0.18" />
 
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:id="@+id/imageViewProfile"
+        android:clickable="true"
+        android:layout_margin="20dp"
+        android:layout_gravity="center"/>
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,19 +38,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_weight="0.10"
+        android:padding="5dp">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="94dp"
+            android:layout_height="match_parent"
             android:text="Gender"
-            android:layout_weight="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:gravity="center_vertical" />
 
         <Spinner
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/sp_gender_profile"
             android:entries="@array/gender"
             android:layout_weight="1">
@@ -52,21 +61,13 @@
     </LinearLayout>
 
 
-    <TextView
+    <!--<TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Choose a Profile Picture/Avatar"
         android:textSize="15dp"
-        />
+        />-->
 
-    <ImageView
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:id="@+id/imageViewProfile"
-        app:srcCompat="?android:attr/actionModeSelectAllDrawable"
-        android:clickable="true"
-        android:layout_margin="20dp"
-        android:layout_gravity="center"/>
 
 
 
@@ -75,7 +76,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="center"
-        android:gravity="center">
+        android:gravity="center"
+        android:padding="20dp">
 
         <Button
             android:layout_width="wrap_content"

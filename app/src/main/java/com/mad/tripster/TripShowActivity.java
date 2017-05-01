@@ -51,6 +51,8 @@ public class TripShowActivity extends AppCompatActivity {
     FirebaseStorage storage;
     StorageReference imageRef;
 
+    boolean showJoinBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +60,8 @@ public class TripShowActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         tripId = getIntent().getExtras().getString("TripID");
+        showJoinBtn = getIntent().getExtras().getBoolean("TripCreated");
+
         Log.d("demo",tripId);
 
         storage = FirebaseStorage.getInstance();
@@ -103,6 +107,7 @@ public class TripShowActivity extends AppCompatActivity {
 
         uid = mAuth.getCurrentUser().getUid();
 
+
         mUserListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -142,6 +147,7 @@ public class TripShowActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Trip trip = dataSnapshot.getValue(Trip.class);
+                Log.d("demo","on trip added");
                 if(trip.getTrip_id().equals(tripId)){
                     currTrip = trip;
                     placeObjectsList = (ArrayList<PlaceObject>) currTrip.getPlaceObjects();
@@ -181,6 +187,7 @@ public class TripShowActivity extends AppCompatActivity {
     }
 
     void display(){
+        Log.d("demo","in display function");
         textViewTitle.setText(currTrip.getTitle().toString());
         textViewLocation.setText(currTrip.getLocation().toString());
         displayPlace();
@@ -192,6 +199,26 @@ public class TripShowActivity extends AppCompatActivity {
         if(list.contains(tripId)){
             btnJoin.setText("Leave");
         }
+
+        if(btnJoin.getText().equals("Join")){
+            btnChatroom.setEnabled(false);
+            btnPlaces.setEnabled(false);
+        }else if(btnJoin.getText().equals("Leave")){
+            btnChatroom.setEnabled(true);
+            btnPlaces.setEnabled(true);
+        }
+
+        /*if(!showJoinBtn){
+            Log.d("demo","show join btn");
+            btnJoin.setEnabled(true);
+        }else{
+            Log.d("demo","don't show join btn");
+            btnJoin.setEnabled(false);
+            btnJoin.setVisibility(View.INVISIBLE);
+            btnChatroom.setEnabled(true);
+            btnPlaces.setEnabled(true);
+        }*/
+
         btnJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -207,6 +234,7 @@ public class TripShowActivity extends AppCompatActivity {
                     currUser.setJoinedTrip(sb.toString());
                     btnJoin.setText("Join");
                     btnChatroom.setEnabled(false);
+                    btnPlaces.setEnabled(false);
                 }else{
                     list.add(tripId);
                     StringBuilder sb = new StringBuilder();
@@ -219,17 +247,14 @@ public class TripShowActivity extends AppCompatActivity {
                     currUser.setJoinedTrip(sb.toString());
                     btnJoin.setText("Leave");
                     btnChatroom.setEnabled(true);
+                    btnPlaces.setEnabled(true);
                 }
                 mUserRef.child(uid).setValue(currUser);
 
             }
         });
 
-        if(btnJoin.getText().equals("Join")){
-            btnChatroom.setEnabled(false);
-        }else if(btnJoin.getText().equals("Leave")){
-            btnChatroom.setEnabled(true);
-        }
+
 
         btnChatroom.setOnClickListener(new View.OnClickListener() {
             @Override
