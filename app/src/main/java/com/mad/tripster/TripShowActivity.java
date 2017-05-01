@@ -5,12 +5,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -21,13 +28,14 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TripShowActivity extends AppCompatActivity {
     String tripId;
     FirebaseAuth mAuth;
     TextView textViewTitle,textViewLocation;
     ImageView imageViewCover;
-    Button btnJoin, btnChatroom;
+    Button btnJoin, btnChatroom, btnPlaces, btnInAppMap, btnGoogleMaps;
     ChildEventListener mTripEventListener,mUserListener;
     DatabaseReference mTripRef,mUserRef;
     FirebaseDatabase db;
@@ -36,6 +44,9 @@ public class TripShowActivity extends AppCompatActivity {
     Trip currTrip;
     ArrayList<String> list;
     String uid;
+    ArrayList<PlaceObject> placeObjectsList;
+    ListView listView;
+    PlaceAdapter placeAdapter;
 
     FirebaseStorage storage;
     StorageReference imageRef;
@@ -57,7 +68,35 @@ public class TripShowActivity extends AppCompatActivity {
         imageViewCover = (ImageView) findViewById(R.id.trip_cover);
         btnJoin = (Button) findViewById(R.id.trip_join);
         btnChatroom = (Button) findViewById(R.id.trip_chatroom);
+        btnPlaces = (Button) findViewById(R.id.trip_places);
+        btnInAppMap = (Button) findViewById(R.id.btn_inapp);
+        btnGoogleMaps = (Button) findViewById(R.id.btn_extapp);
+        placeObjectsList = new ArrayList<>();
 
+        btnPlaces.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    Log.d("demo","Add places clicked");
+                    Intent intent =
+                            new PlaceAutocomplete
+                                    .IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                                    .build(TripShowActivity.this);
+                    startActivityForResult(intent, 1111);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        btnInAppMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(TripShowActivity.this, MapsActivity.class);
+                intent.putExtra("Place_ArrayList",placeObjectsList);
+                startActivity(intent);
+            }
+        });
         db = FirebaseDatabase.getInstance();
         mTripRef = db.getReference().child("trips");
         mUserRef = db.getReference().child("users");
@@ -104,6 +143,7 @@ public class TripShowActivity extends AppCompatActivity {
                 Trip trip = dataSnapshot.getValue(Trip.class);
                 if(trip.getTrip_id().equals(tripId)){
                     currTrip = trip;
+                    placeObjectsList = (ArrayList<PlaceObject>) currTrip.getPlaceObjects();
                     display();
 
                 }
@@ -142,6 +182,7 @@ public class TripShowActivity extends AppCompatActivity {
     void display(){
         textViewTitle.setText(currTrip.getTitle().toString());
         textViewLocation.setText(currTrip.getLocation().toString());
+        displayPlace();
         // Display image
         //imageViewCover
         Glide.with(this).using(new FirebaseImageLoader()).load(imageRef.child(currTrip.getImage_url())).into(imageViewCover);
@@ -213,5 +254,44 @@ public class TripShowActivity extends AppCompatActivity {
         }
         Log.d("demo","Print list:"+list1.size()+list1.toString());
         return list1;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("demo","In Activity Result");
+        if (requestCode == 1111) {
+            if (resultCode == RESULT_OK) {
+                Log.d("demo","In Activity Result Result OK");
+                // retrive the data by using getPlace() method.
+                Place place = PlaceAutocomplete.getPlace(this, data);
+                Log.e("Tag", "Place: " + place.getAddress() + place.getPhoneNumber()+ place.getLatLng() + place.toString());
+
+                LatLng temp = place.getLatLng();
+                PlaceObject placeObject = new PlaceObject(String.valueOf(System.currentTimeMillis()),String.valueOf(place.getName()),temp.latitude,temp.longitude,String.valueOf(place.getAddress()));
+                placeObjectsList.add(placeObject);
+
+                currTrip.setPlaceObjects(placeObjectsList);
+
+                displayPlace();
+            }
+        }
+    }
+
+    void displayPlace(){
+        if(placeObjectsList!=null) {
+            if (placeObjectsList.size() != 0) {
+
+                listView = (ListView) findViewById(R.id.ListView_places);
+                placeAdapter = new PlaceAdapter(TripShowActivity.this, R.layout.row_layout_place, placeObjectsList);
+                placeAdapter.setNotifyOnChange(true);
+
+                listView.setClickable(true);
+                listView.setLongClickable(true);
+                listView.setAdapter(placeAdapter);
+                Log.d("demo", placeObjectsList.size() + "");
+            } else {
+                Toast.makeText(this, "No Place Locations added!", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

@@ -1,5 +1,7 @@
 package com.mad.tripster;
 
+import java.util.List;
+
 /**
  * Created by Chinmay Rawool on 4/20/2017.
  */
@@ -11,6 +13,7 @@ public class Trip {
     public String image_url;
     public String created_by;
     public String trip_id;
+    public List<PlaceObject> placeObjects;
 
     public Trip() {
     }
@@ -22,6 +25,14 @@ public class Trip {
         this.image_url = image_url;
         this.created_by = created_by;
         this.trip_id = trip_id;
+    }
+
+    public List<PlaceObject> getPlaceObjects() {
+        return placeObjects;
+    }
+
+    public void setPlaceObjects(List<PlaceObject> placeObjects) {
+        this.placeObjects = placeObjects;
     }
 
     public String getCreated_by() {
